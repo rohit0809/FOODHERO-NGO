@@ -143,7 +143,7 @@ var delayMillis=2000;
     password: document.getElementById("password").value
   };
     var newPostKey = firebase.database().ref().child('NGO admin').push().key;
-//I have added yayyyy
+
   // Write the new post's data simultaneously in the posts list and the user's post list.
   alert(newPostKey);
   //alert(firebase.database().ref().child('NGO admin')+'/'+ newPostKey);

@@ -152,22 +152,21 @@ else
             })*/
             function notify()
             {
-                
+                var lst=[];
                 var table=document.getElementById('table_body');
                 var flag=[];
-                var syn1=0;
-                var rootref2=secondaryDatabase.ref().child('Volunteer');
+var syn1=0;
+var rootref2=secondaryDatabase.ref().child('Volunteer');
 //alert(table.rows.length);
-        var address,email,volname,phone,did,place,landmark,name,quantity,shlife,dob,rid;
-        for(var i=1; i<table.rows.length;i++)
-        flag[i]=0;
+   var address,email,volume,phone,did,place,landmark,name,quantity,shlife,status,reqid;
+ for(var i=1; i<table.rows.length;i++)
+     flag[i]=0;
         rootref2.on("child_added",snap=>{
-        
         address=snap.child("Address") .val();
-        dob=snap.child("DOB").val();
         email=snap.child("Email") .val();
         volname=snap.child("Name") .val();
         phone=snap.child("Phone") .val();
+        status=snap.child("Status") .val();
        // alert(landmark+" "+address+" "+name);
         for(var i=1; i<table.rows.length;i++){
 
@@ -176,46 +175,65 @@ else
         landmark=(table.rows[i].cells[2].innerHTML);
         name=(table.rows[i].cells[3].innerHTML);
         quantity=(table.rows[i].cells[4].innerHTML);
-        rid=(table.rows[i].cells[5].innerHTML);
+        reqid=(table.rows[i].cells[5].innerHTML);
         shlife=(table.rows[i].cells[6].innerHTML);
       // alert(landmark);
          
- if(flag[i]==1)
+ if((flag[i])||(status=="1"))
      continue;
             if((landmark==address)&&(flag[i]==0))
             {
-                alert(volname);
+                lst.push(snap.key);
+                //var ref = rootref2.child(snap.key);
+                //alert(ref);
+              //ref.update({Status:"1"});
+                alert(name);
+                var delayMillis = 5000; //1 second
+
+setTimeout(function() {
+  //your code to be executed after 1 second
+  var c;
+  c++;
+}, delayMillis);
                flag[i]=1;
     var postData = {
     add: landmark,
+   dadd: place,
     itemname: name,
     volph: phone,
     volunteername: volname,
     volid: email,
     donorid: did,
     quant: quantity,
-    shelflife: shlife,
-    requestid: rid,
-    flag:0,
-    exp_time:0
+    requestid: reqid,
+    shelflife: shlife, 
+    flag:"0",
+    exp_time:"0"
     };
     
     var newPostKey = secondaryDatabase.ref().child('Request_Database').push().key;
-    var newPostKey2 = secondaryDatabase.ref().child('History').push().key;
+    //var newPostKey2 = secondaryDatabase.ref().child('History').push().key;
     // Write the new post's data simultaneously in the posts list and the user's post list.
     //alert(newPostKey+" "+i);
     //alert(firebase.database().ref().child('NGO admin')+'/'+ newPostKey);
     secondaryDatabase.ref().child('Request_Database').child(newPostKey).set(postData);
-    secondaryDatabase.ref().child('History').child(newPostKey2).set(postData);
+    //secondaryDatabase.ref().child('History').child(newPostKey2).set(postData);
             }
            
         }
         })
         //}, delayMillis);
         
-         
-           
-          
+         var delayMillis = 5000; //1 second
+
+setTimeout(function() {
+  //your code to be executed after 1 second
+
+           for(i=0;i<lst.length;i++)
+           {
+               rootref2.child(lst[i]).update({Status:"1"});
+           }
+          }, delayMillis);
             }
         
         </script>
